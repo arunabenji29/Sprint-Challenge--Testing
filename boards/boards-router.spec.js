@@ -81,6 +81,26 @@ describe('Games router', () => {
         })
     })
 
+    describe('GET by id/', () => {
+        it('responds with 200 OK', async () => {
+            let game = { "title": 'Pacman2', "genre": "Arcade2", "releaseYear": 1982 }
+            await supertest(server)
+                .post('/games')
+                .send(game)
+            await supertest(server)
+                .get('/games/1')
+                .expect(200)
+        })
+
+        it('responds with 404 OK', async () => {
+            await supertest(server)
+                .get('/games/1')
+                .expect(404)
+        })
+
+    })
+
+
     describe('DELETE /', () =>{
 
         it('responds with 201 OK',async () => {

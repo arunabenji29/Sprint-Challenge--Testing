@@ -4,6 +4,7 @@ module.exports = {
     insert,
     remove,
     getGames,
+    getGamesById,
 }
 
 function insert(game){
@@ -24,4 +25,10 @@ function remove(id){
 
 function getGames(){
     return db('boards')
+}
+
+function getGamesById(id){
+    return db('boards')
+    .where({id})
+    .first()
 }

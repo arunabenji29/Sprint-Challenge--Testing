@@ -16,6 +16,24 @@ router.get('/', (req,res) => {
     )
 })
 
+router.get('/:id', (req,res) => {
+    Boards.getGamesById(req.params.id)
+    .then(board => {
+        if(board)
+        {
+            res.status(200).json(board);
+        }
+        else {
+            res.status(404).json({message:'Board id not found'});
+        }
+    })
+    .catch(error => {
+        res.status(500).json(error);
+    }
+
+    )
+})
+
 router.post('/', (req,res) => {
     Boards
     .insert(req.body)
