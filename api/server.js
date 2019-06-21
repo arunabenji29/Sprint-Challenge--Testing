@@ -1,6 +1,7 @@
 const express = require('express')
 
 const helmet = require('helmet')
+const boardRouter = require('../boards/boards-router.js')
 
 const server = express()
 
@@ -12,6 +13,6 @@ server.get('/',(req,res) => {
     res.status(200).json({api:"up"})
 })
 
-// server.use()
+server.use('/games',boardRouter)
 
 module.exports = server
