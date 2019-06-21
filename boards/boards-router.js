@@ -3,7 +3,7 @@ const router = require('express').Router();
 const Boards = require('./boards-model.js')
 
 router.get('/', (req,res) => {
-    console.log(req.body)
+    // console.log(req.body)
     Boards.getGames()
     .then(board => {
         // console.log('all games ',board)
@@ -29,6 +29,28 @@ router.post('/', (req,res) => {
         }
     })
     .catch(error => {
+        res.status(500).json(error);
+    }
+
+    )
+})
+
+router.delete('/:id', (req,res) => {
+    
+    Boards
+    .remove(req.params.id)
+    .then(count => {
+        // console.log('count ',count)
+        if(count>0)
+        {
+            res.status(201).json(count);
+        }
+        else{
+            res.status(404).json({message:'zoo id not found'});
+        }
+    })
+    .catch(error => {
+        // console.log('update error ',error)
         res.status(500).json(error);
     }
 

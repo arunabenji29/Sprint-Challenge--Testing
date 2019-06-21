@@ -52,11 +52,7 @@ describe('Games router', () => {
     })
 
     describe('GET /', () => {
-        it('responds with 200 OK', async () => {
-            await supertest(server)
-                .get('/games')
-                .expect(200)
-        })
+        
 
         it('check for an empty array', async () => {
             const res = await supertest(server)
@@ -65,7 +61,7 @@ describe('Games router', () => {
         })
 
         it('checking the content type to be json', async () => {
-            let game = { "title": 'Pacman1', "genre": "Arcade1", "releaseYear": 1981 }
+            let game = { "title": 'Pacman5', "genre": "Arcade5", "releaseYear": 1985 }
             await supertest(server)
                 .post('/games')
                 .send(game)
@@ -73,5 +69,55 @@ describe('Games router', () => {
                 .get('/games')
                 .expect('Content-Type', /json/i)
         })
+
+        it('responds with 200 OK', async () => {
+            let game = { "title": 'Pacman7', "genre": "Arcade7", "releaseYear": 1987 }
+            await supertest(server)
+                .post('/games')
+                .send(game)
+            await supertest(server)
+                .get('/games')
+                .expect(200)
+        })
     })
+
+    describe('DELETE /', () =>{
+
+        it('responds with 201 OK',async () => {
+            let game = { "title": 'pacman6', "genre": "Arcade6", "releaseYear": 1986 }
+            await supertest(server)
+                .post('/games')
+                .send(game)
+            const res = await supertest(server)
+            .get('/games')
+            
+            await supertest(server)
+            .delete(`/games/${res.body.board[0].id}`)
+            .expect(201)
+        })
+    
+        it('see if the array is empty',async () => {
+            let game = { "title": 'pacman6', "genre": "Arcade6", "releaseYear": 1986 }
+            await supertest(server)
+                .post('/games')
+                .send(game)
+            const res = await supertest(server)
+            .get('/games')
+            
+            await supertest(server)
+            .delete(`/games/${res.body.board[0].id}`)
+            .then(res => {
+                expect(res.body).not.toBeNull()
+
+            })
+        })
+
+    it('responds with 404 OK',async () => {
+    
+        
+        await supertest(server)
+        .delete('/games/1')
+        .expect(404)
+    })
+})
 })
