@@ -3,7 +3,7 @@ const supertest = require('supertest')
 const server = require('../api/server.js')
 const db = require('../data/dbConfig.js')
 
-describe('student router', () => {
+describe('Games router', () => {
     beforeEach(async () => {
         await db('boards').truncate();
     });
@@ -47,6 +47,30 @@ describe('student router', () => {
             await supertest(server)
                 .post('/games')
                 .send(game)
+                .expect('Content-Type', /json/i)
+        })
+    })
+
+    describe('GET /', () => {
+        it('responds with 200 OK', async () => {
+            await supertest(server)
+                .get('/games')
+                .expect(200)
+        })
+
+        it('check for an empty array', async () => {
+            const res = await supertest(server)
+                .get('/games')
+            expect(res.body.board).toEqual([])
+        })
+
+        it('checking the content type to be json', async () => {
+            let game = { "title": 'Pacman1', "genre": "Arcade1", "releaseYear": 1981 }
+            await supertest(server)
+                .post('/games')
+                .send(game)
+            await supertest(server)
+                .get('/games')
                 .expect('Content-Type', /json/i)
         })
     })
